@@ -12,7 +12,7 @@ class YoutubePlayer(commands.Cog):
         self.ffmpeg_path = "./ffmpeg/bin/ffmpeg.exe"
         self.song_path = "./music_tmp/"
 
-        self.play_prefix = ["https://www.youtube.com/","https://music.youtube.com/"]
+        self.play_prefix = ["https://www.youtube.com/", "https://music.youtube.com/"]
         self.playlist_prefix = ["https://www.youtube.com/playlist?list=", "https://youtube.com/playlist?list=", "https://music.youtube.com/playlist?list="]
     
     @app_commands.command(name= "join", description= "加入語音頻道")
@@ -40,8 +40,9 @@ class YoutubePlayer(commands.Cog):
     @app_commands.command(name= "play", description= "播放音樂")
     async def play(self, interaction: discord.Interaction, youtube_url: str) -> None:
         await interaction.response.send_message(f"Your URL is {youtube_url}")
-        if youtube_url.startswith(self.playlist_prefix[2]) or youtube_url.startswith(self.playlist_prefix[1]):
-            youtube_url = youtube_url.replace("music.", "")
+        if youtube_url.startswith(self.playlist_prefix[2]) or youtube_url.startswith(self.playlist_prefix[1]) or youtube_url.startswith(self.play_prefix[1]):
+            youtube_url = youtube_url.replace("music.", "www.")
+
         if youtube_url.startswith(self.playlist_prefix[0]) or youtube_url.startswith(self.playlist_prefix[1]):
             if interaction.user.voice == None:
                 await interaction.response.send_message('使用者還沒進入語音頻道呦')
@@ -83,7 +84,7 @@ class YoutubePlayer(commands.Cog):
                         url_parse = YouTube(p)
                         self.title_queue.append(url_parse.title)   
 
-        elif youtube_url.startswith(self.play_prefix[0]):
+        elif youtube_url.startswith(self.play_prefix[0]) or youtube_url.startswith("https:/youtube.com/"):
             if interaction.user.voice == None:
                 await interaction.response.send_message('使用者還沒進入語音頻道呦')
             elif self.bot.voice_clients == []:
@@ -181,6 +182,30 @@ class YoutubePlayer(commands.Cog):
             playlist_check += "```"
             print(self.play_queue)
             await interaction.response.send_message(playlist_check)
+
+    @app_commands.command(name= "insert", description= "插入歌曲到下一首")       
+    async def insert(self, interaction: discord.Interaction, youtube_url: str) -> None:
+        if self.bot.voice_clients != []:
+            await interaction.response.send_message(f"Your URL is {youtube_url}")
+            if youtube_url.startswith(self.play_prefix[1]):
+                youtube_url = youtube_url.replace("music.", "www.")
+            if youtube_url.startswith(self.play_prefix[0]):
+                music = YouTube(youtube_url)
+                title = music.title
+                self.play_queue.insert(1, youtube_url)
+                self.title_queue.insert(1, title)
+            else:
+                await interaction.response.send_message(f"找不到此首歌曲或您的連結為歌曲清單連結")
+        else:
+            await interaction.response.send_message('機器人未加入語音頻道')
+
+    def clean(self, interaction):
+        try:
+            for file in os.scandir(self.song_path):
+                if file.path[-4:] == ".mp3":
+                    os.remove(file.path)
+        except:
+            pass
 
     def clean(self, interaction):
         try:

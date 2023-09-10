@@ -14,5 +14,10 @@ class General(commands.Cog):
     async def id(self, interaction: discord.Interaction):
         await interaction.response.send_message(f"Your user ID:{interaction.user.id}")
 
+    @app_commands.command(name= "exit", description="關閉機器人")
+    async def exit(self, interaction: discord.Interaction):
+        await interaction.response.send_message(f'正在關閉機器人...')
+        await self.bot.close()
+
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(General(bot), guild= None)
