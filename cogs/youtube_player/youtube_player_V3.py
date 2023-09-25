@@ -13,7 +13,7 @@ class YoutubePlayer(commands.Cog):
         self.song_path = "./music_tmp/"
 
         self.play_prefix = ["https://www.youtube.com/", "https://music.youtube.com/"]
-        self.playlist_prefix = ["https://www.youtube.com/playlist?list=", "https://youtube.com/playlist?list=", "https://music.youtube.com/playlist?list="]
+        self.playlist_prefix = ["https://www.youtube.com/playlist?list=", "https://music.youtube.com/playlist?list="]
     
     @app_commands.command(name= "join", description= "加入語音頻道")
     async def join(self, interaction: discord.Interaction) -> None:
@@ -40,10 +40,10 @@ class YoutubePlayer(commands.Cog):
     @app_commands.command(name= "play", description= "播放音樂")
     async def play(self, interaction: discord.Interaction, youtube_url: str) -> None:
         await interaction.response.send_message(f"Your URL is {youtube_url}")
-        if youtube_url.startswith(self.playlist_prefix[2]) or youtube_url.startswith(self.playlist_prefix[1]) or youtube_url.startswith(self.play_prefix[1]):
+        if youtube_url.startswith(self.playlist_prefix[1]) or youtube_url.startswith(self.play_prefix[1]):
             youtube_url = youtube_url.replace("music.", "www.")
 
-        if youtube_url.startswith(self.playlist_prefix[0]) or youtube_url.startswith(self.playlist_prefix[1]):
+        if youtube_url.startswith(self.playlist_prefix[0]):
             if interaction.user.voice == None:
                 await interaction.response.send_message('使用者還沒進入語音頻道呦')
             elif self.bot.voice_clients == []:
@@ -84,7 +84,7 @@ class YoutubePlayer(commands.Cog):
                         url_parse = YouTube(p)
                         self.title_queue.append(url_parse.title)   
 
-        elif youtube_url.startswith(self.play_prefix[0]) or youtube_url.startswith("https:/youtube.com/"):
+        elif youtube_url.startswith(self.play_prefix[0]):
             if interaction.user.voice == None:
                 await interaction.response.send_message('使用者還沒進入語音頻道呦')
             elif self.bot.voice_clients == []:
