@@ -24,7 +24,7 @@ class SyaroBot(commands.Bot):
     async def on_ready(self):
         print(f"{self.user} is online.") # print('logging in as {0.user}'.format(bot))
         print(f"delay time: {str(round(self.latency*1000, 2))}ms.")
-        game = discord.Game("ブルーアーカイブ -Blue Archive-") # status
+        game = discord.Game("正在研究人生道理") # status
         await self.change_presence(status=discord.Status.online, activity=game) # change status to game
 
 bot = SyaroBot()

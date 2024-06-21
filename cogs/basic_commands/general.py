@@ -1,4 +1,4 @@
-import discord, os
+import discord, _osx_support
 from discord import app_commands
 from discord.ext import commands
 

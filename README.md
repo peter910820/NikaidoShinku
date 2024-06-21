@@ -2,6 +2,8 @@
 
 new discord music bot
 
+## 03/21:修正部分網址不能撥放歌曲之錯誤
+
 ### command:
 
 ```
