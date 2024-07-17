@@ -1,19 +1,18 @@
-import discord, os, asyncio, json
+import discord, os
 from discord import app_commands
 from discord.ext import commands
-from pytube import YouTube, Playlist
+from pytube import Playlist, YouTube
 
 class YoutubePlayer(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.forbidden_char = ['/','\\',':','*','?','"','<','>',"|"]
-        self.play_queue = []
-        self.title_queue = []
+        self.play_queue, self.title_queue = [], []
         self.ffmpeg_path = "./ffmpeg/bin/ffmpeg.exe"
         self.song_path = "./music_tmp/"
 
         self.play_prefix = ["https://www.youtube.com/", "https://music.youtube.com/", "https://youtube.com/"]
-        self.playlist_prefix = ["https://www.youtube.com/playlist?list=", "https://music.youtube.com/playlist?list=",  "https://youtube.com/playlist?list="]
+        self.playlist_prefix = ["https://www.youtube.com/playlist?list=", "https://music.youtube.com/playlist?list=", "https://youtube.com/playlist?list="]
     
     @app_commands.command(name= "join", description= "加入語音頻道")
     async def join(self, interaction: discord.Interaction) -> None:
@@ -40,8 +39,7 @@ class YoutubePlayer(commands.Cog):
     @app_commands.command(name= "play", description= "播放音樂")
     async def play(self, interaction: discord.Interaction, youtube_url: str) -> None:
         await interaction.response.send_message(f"Your URL is {youtube_url}")
-        if youtube_url.startswith(self.playlist_prefix[1]) or youtube_url.startswith(self.play_prefix[1]):
-            youtube_url = youtube_url.replace("music.", "www.")
+        youtube_url = youtube_url.replace("music.", "www.") if 'https://music.youtube.com/' in youtube_url else youtube_url
 
         if youtube_url.startswith(self.playlist_prefix[0]) or youtube_url.startswith(self.playlist_prefix[2]):
             if interaction.user.voice == None:
