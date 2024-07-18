@@ -237,7 +237,7 @@ class YoutubePlayer(commands.Cog):
     #handle the same working----------------------------------------------------------------------------#
 
     async def change_status_music(self):
-        music = discord.Activity(type=discord.ActivityType.listening, name = 'Yotube的音樂')
+        music = discord.Activity(type=discord.ActivityType.listening, name = 'Youtube的音樂')
         await self.bot.change_presence(activity=music, status=discord.Status.online)
         self.clean(self) # delete all mp3 file
     
