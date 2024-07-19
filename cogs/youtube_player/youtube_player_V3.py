@@ -1,4 +1,4 @@
-import discord, os, re
+import discord, os
 from discord import app_commands
 from discord.ext import commands
 from pytube import Playlist, YouTube
@@ -213,7 +213,7 @@ class YoutubePlayer(commands.Cog):
         else:
             await interaction.response.send_message('沒有歌曲正在播放呦')
 
-    @app_commands.command(name= "resume", description= "繼續撥放歌曲")  
+    @app_commands.command(name= "resume", description= "繼續播放歌曲")  
     async def resume(self, interaction):
         if self.bot.voice_clients[0].is_paused():
             self.bot.voice_clients[0].resume()

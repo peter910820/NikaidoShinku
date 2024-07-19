@@ -9,31 +9,32 @@ class YoutubePlayerV3r(commands.Cog):
         self.forbidden_char = ['/','\\',':','*','?','"','<','>',"|"]
         self.play_queue = []
         self.pause_flag = False
-        self.ffmpeg_path = "./ffmpeg/bin/ffmpeg.exe"
-        self.song_path = "./music_tmp/"
+        self.ffmpeg_path = './ffmpeg/bin/ffmpeg.exe'
+        self.song_path = './music_tmp/'
+        self.volume = 0.1
 
-    @app_commands.command(name= "join", description= "加入語音頻道")
+    @app_commands.command(name= 'join', description= '🌟加入語音頻道🌟')
     async def join(self, interaction: discord.Interaction) -> None:
         if interaction.user.voice == None:
-            await interaction.response.send_message("未加入頻道")
+            await interaction.response.send_message('未加入頻道')
         elif self.bot.voice_clients == []:
             voiceChannel = interaction.user.voice.channel
             await voiceChannel.connect()
             await self.change_status_music()
         else:
-            await interaction.response.send_message("已加入頻道")
+            await interaction.response.send_message('已加入頻道')
 
-    @app_commands.command(name= "leave", description= "離開語音頻道")
+    @app_commands.command(name= 'leave', description= '🌟離開語音頻道🌟')
     async def leave(self, interaction: discord.Interaction) -> None:
         if self.bot.voice_clients != []:
             await self.bot.voice_clients[0].disconnect()
-            await self.bot.change_presence(activity = discord.Game("ブルーアーカイブ -Blue Archive-"), status=discord.Status.online)
-            await interaction.response.send_message("已離開頻道")
+            await self.bot.change_presence(activity = discord.Game('ブルーアーカイブ -Blue Archive-'), status=discord.Status.online)
+            await interaction.response.send_message('已離開頻道❌')
         else:
-            await interaction.response.send_message("目前沒有在任何頻道")
+            await interaction.response.send_message('目前沒有在任何頻道❌')
         self.clean(self)
 
-    @app_commands.command(name= "play", description= "播放音樂")
+    @app_commands.command(name= 'play', description= '🌟播放音樂🌟')
     async def play(self, interaction: discord.Interaction, youtube_url: str) -> None:
         youtube_url = self.url_format(youtube_url)
         if await self.handle_connect(interaction):
@@ -41,40 +42,40 @@ class YoutubePlayerV3r(commands.Cog):
                 try:
                     await self.handle_playlist(youtube_url)
                 except Exception as e:
-                    print(f'error={e}')
-                    await interaction.response.send_message("❌意外狀況發生,請檢察log❌")
+                    print(f'❌error={e}❌')
+                    await interaction.response.send_message('❌意外狀況發生,請檢察log❌')
                     return
                 if not self.bot.voice_clients[0].is_playing():
-                    await interaction.response.send_message(f'歌曲已加入: 歌單URL為{youtube_url}呦 🌟')
+                    await interaction.response.send_message(f'歌單已加入: 歌單URL為{youtube_url} 呦🌟')
                     title = self.play_queue[0]['music_object'].title
                     music = self.play_queue[0]['music_object']
                     try:
-                        music.streams.filter().get_lowest_resolution().download(filename=f"{self.song_path}/{title}.mp3")
+                        music.streams.filter().get_lowest_resolution().download(filename=f'{self.song_path}/{title}.mp3')
                     except:
                         for f in self.forbidden_char:
                             title = title.replace(f,' ')
-                        music.streams.filter().get_lowest_resolution().download(filename=f"{self.song_path}/{title}.mp3")
-                    self.bot.voice_clients[0].play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable=self.ffmpeg_path, source=f"{self.song_path}/{title}.mp3"), volume= 0.1), after = lambda _ : self.after_song_interface(interaction))
+                        music.streams.filter().get_lowest_resolution().download(filename=f'{self.song_path}/{title}.mp3')
+                    self.bot.voice_clients[0].play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable=self.ffmpeg_path, source=f'{self.song_path}/{title}.mp3'), volume=self.volume), after = lambda _ : self.after_song_interface(interaction))
                 else:
-                    await interaction.response.send_message(f'歌曲已加入排序: 歌單URL為{youtube_url}呦 🌟')
+                    await interaction.response.send_message(f'歌曲已加入排序: 歌單URL為{youtube_url} 呦🌟')
             elif youtube_url.startswith('https://www.youtube.com/'):
                 try:
                     self.play_queue.append({'url': youtube_url, 'music_object': YouTube(youtube_url)})
                 except Exception as e:
-                    print(f'error={e}')
-                    await interaction.response.send_message("❌意外狀況發生,請檢察log❌")
+                    print(f'❌error={e}❌')
+                    await interaction.response.send_message('❌意外狀況發生,請檢察log❌')
                     return
                 if not self.bot.voice_clients[0].is_playing():
-                    await interaction.response.send_message(f'歌曲已加入: 歌曲URL為{youtube_url}呦 🌟')
+                    await interaction.response.send_message(f'歌曲已加入: 歌曲URL為{youtube_url} 呦🌟')
                     title = self.play_queue[0]['music_object'].title
                     music = self.play_queue[0]['music_object']
                     try:
-                        music.streams.filter().get_lowest_resolution().download(filename=f"{self.song_path}/{title}.mp3")
+                        music.streams.filter().get_lowest_resolution().download(filename=f'{self.song_path}/{title}.mp3')
                     except:
                         for f in self.forbidden_char:
                             title = title.replace(f,' ')
-                        music.streams.filter().get_lowest_resolution().download(filename=f"{self.song_path}/{title}.mp3")
-                    self.bot.voice_clients[0].play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable=self.ffmpeg_path, source=f"{self.song_path}/{title}.mp3"), volume= 0.1), after = lambda _ : self.after_song_interface(interaction))
+                        music.streams.filter().get_lowest_resolution().download(filename=f'{self.song_path}/{title}.mp3')
+                    self.bot.voice_clients[0].play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable=self.ffmpeg_path, source=f'{self.song_path}/{title}.mp3'), volume=self.volume), after = lambda _ : self.after_song_interface(interaction))
                 else:
                     await interaction.response.send_message(f'歌曲已加入排序: 歌曲URL為{youtube_url} 呦🌟')
             else:
@@ -90,12 +91,12 @@ class YoutubePlayerV3r(commands.Cog):
             title = self.play_queue[0]['music_object'].title
             music = self.play_queue[0]['music_object']
             try:
-                music.streams.filter().get_lowest_resolution().download(filename=f"{self.song_path}/{title}.mp3")
+                music.streams.filter().get_lowest_resolution().download(filename=f'{self.song_path}/{title}.mp3')
             except:
                 for f in self.forbidden_char:
-                    title = title.replace(f," ")
-                music.streams.filter().get_lowest_resolution().download(filename=f"{self.song_path}/{title}.mp3")
-            self.bot.voice_clients[0].play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable=self.ffmpeg_path, source=f"{self.song_path}/{title}.mp3"), volume= 0.1), after = lambda _ : self.after_song_interface(interaction))
+                    title = title.replace(f,' ')
+                music.streams.filter().get_lowest_resolution().download(filename=f'{self.song_path}/{title}.mp3')
+            self.bot.voice_clients[0].play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable=self.ffmpeg_path, source=f'{self.song_path}/{title}.mp3'), volume= 0.1), after = lambda _ : self.after_song_interface(interaction))
         else:
             self.clean(self)
             game = discord.Game('恋×シンアイ彼女')
@@ -125,16 +126,16 @@ class YoutubePlayerV3r(commands.Cog):
         music = discord.Activity(type=discord.ActivityType.listening, name = 'Youtube的音樂')
         await self.bot.change_presence(activity=music, status=discord.Status.online)
 
-    @app_commands.command(name= "list", description= "查詢歌曲清單")       
+    @app_commands.command(name= 'list', description= '🌟查詢歌曲清單🌟')       
     async def list(self, interaction: discord.Interaction) -> None:
         if len(self.play_queue) == 0:
             await interaction.response.send_message('播放清單目前為空呦')
         else:
-            playlist_check = f"```\n播放清單剩餘歌曲: {len(self.play_queue)}首\n"
+            playlist_check = f'```\n播放清單剩餘歌曲: {len(self.play_queue)}首\n'
             for index, t in enumerate(self.play_queue, start=1):
-                playlist_check += f"{index}. {t['music_object'].title}\n"
+                playlist_check += f'{index}. {t["music_object"].title}\n'
                 if len(playlist_check) >= 500:
-                    playlist_check += " ...還有很多首"
+                    playlist_check += ' ...還有很多首'
                     break
             playlist_check += "```"
             print(playlist_check)
@@ -148,22 +149,49 @@ class YoutubePlayerV3r(commands.Cog):
             tmp_str = f'現在歌曲: **{self.play_queue[0]["music_object"].title}**'
             await interaction.response.send_message(tmp_str)
 
+    @app_commands.command(name= 'insert', description= '🌟插入歌曲到下一首🌟')
+    async def insert(self, interaction: discord.Interaction, youtube_url: str) -> None:
+        youtube_url = self.url_format(youtube_url)
+        if youtube_url.startswith('https://www.youtube.com/playlist?list='):
+            await interaction.response.send_message(f'此功能不支援清單插入呦❌')
+            return
+        elif not youtube_url.startswith('https://www.youtube.com/'):
+            await interaction.response.send_message('找不到歌曲呦!❌')
+        else:
+            if self.bot.voice_clients != []:
+                await interaction.response.send_message('插入歌曲到下一首🌟')
+                try:
+                    self.play_queue.insert(1, {'url': youtube_url, 'music_object': YouTube(youtube_url)})
+                except Exception as e:
+                    print(f'❌error={e}❌')
+            else:
+                await interaction.response.send_message('機器人未加入語音頻道呦❌')
+
     @app_commands.command(name= 'skip', description= '🌟跳過歌曲🌟')
     async def skip(self, interaction: discord.Interaction, count: int= 1) -> None:
         if self.bot.voice_clients[0] != []:
-            if self.bot.voice_clients[0].is_playing():
-                self.bot.voice_clients[0].stop()
-                if count > 1:
-                    count -= 1
-                    for _ in range(0, count):
-                        self.play_queue.pop(0)
-                await interaction.response.send_message('歌曲已跳過🌟')
-            else:
-                await interaction.response.send_message.send('沒有歌曲正在播放呦🌟')
+            await interaction.response.send_message('歌曲已跳過🌟')
+            self.bot.voice_clients[0].stop()
+            if count > 1:
+                count -= 1
+                for _ in range(0, count):
+                    self.play_queue.pop(0)
         else:
             await interaction.response.send_message('我還沒加入語音頻道呦🌟')
 
-    @app_commands.command(name= "pause", description= "🌟暫停歌曲🌟")  
+    @app_commands.command(name= "look", description= "🌟查看指定位置歌曲🌟")  
+    async def look(self, interaction: discord.Interaction, number: int) -> None:
+        if len(self.play_queue) == 0:
+            await interaction.response.send_message('❌播放清單目前為空呦❌')
+            return
+        try:
+            msg = f'第{number}的歌曲為: **{self.play_queue[number-1]["music_object"].title}**' if number > 0 else '索引值不得為0或小於0'
+            await interaction.response.send_message(msg)
+        except Exception as e:
+            print(f'❌error={e}❌')
+            await interaction.response.send_message('❌意外狀況發生,請檢察log❌')
+
+    @app_commands.command(name= 'pause', description= '🌟暫停歌曲🌟')  
     async def pause(self, interaction) -> None:
         if self.bot.voice_clients[0].is_playing():
             self.bot.voice_clients[0].pause()
@@ -172,7 +200,7 @@ class YoutubePlayerV3r(commands.Cog):
         else:
             await interaction.response.send_message('沒有歌曲正在播放呦🌟')
 
-    @app_commands.command(name= "resume", description= "🌟繼續撥放歌曲🌟")  
+    @app_commands.command(name= 'resume', description= '🌟繼續播放歌曲🌟')  
     async def resume(self, interaction) -> None:
         if self.bot.voice_clients[0].is_paused():
             self.bot.voice_clients[0].resume()
