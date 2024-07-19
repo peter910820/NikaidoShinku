@@ -131,25 +131,24 @@ class YoutubePlayerV3r(commands.Cog):
             await interaction.response.send_message('播放清單目前為空呦')
         else:
             playlist_check = f"```\n播放清單剩餘歌曲: {len(self.play_queue)}首\n"
-            for index, t in enumerate(self.play_queue['music_object'].title, start=1):
-                playlist_check += f"{index}. {t}\n"
+            for index, t in enumerate(self.play_queue, start=1):
+                playlist_check += f"{index}. {t['music_object'].title}\n"
                 if len(playlist_check) >= 500:
                     playlist_check += " ...還有很多首"
                     break
             playlist_check += "```"
-            print(self.play_queue)
+            print(playlist_check)
             await interaction.response.send_message(playlist_check)
 
-    @app_commands.command(name= "now", description= "現在播放歌曲")
+    @app_commands.command(name= 'now', description= '🌟現在播放歌曲🌟')
     async def now(self, interaction: discord.Interaction) -> None:
         if len(self.play_queue) == 0:
-            await interaction.response.send_message('播放清單目前為空呦')
+            await interaction.response.send_message('播放清單目前為空呦🌟')
         else:
-            tmp_str = f"現在歌曲: **{self.play_queue['music_object'].title}**"
-
+            tmp_str = f'現在歌曲: **{self.play_queue[0]["music_object"].title}**'
             await interaction.response.send_message(tmp_str)
 
-    @app_commands.command(name= "skip", description= "跳過歌曲")
+    @app_commands.command(name= 'skip', description= '🌟跳過歌曲🌟')
     async def skip(self, interaction: discord.Interaction, count: int= 1) -> None:
         if self.bot.voice_clients[0] != []:
             if self.bot.voice_clients[0].is_playing():
@@ -158,29 +157,29 @@ class YoutubePlayerV3r(commands.Cog):
                     count -= 1
                     for _ in range(0, count):
                         self.play_queue.pop(0)
-                await interaction.response.send_message('歌曲已跳過')
+                await interaction.response.send_message('歌曲已跳過🌟')
             else:
-                await interaction.response.send_message.send('沒有歌曲正在播放呦')
+                await interaction.response.send_message.send('沒有歌曲正在播放呦🌟')
         else:
-            await interaction.response.send_message('我還沒加入語音頻道呦')
+            await interaction.response.send_message('我還沒加入語音頻道呦🌟')
 
-    @app_commands.command(name= "pause", description= "暫停歌曲")  
+    @app_commands.command(name= "pause", description= "🌟暫停歌曲🌟")  
     async def pause(self, interaction) -> None:
         if self.bot.voice_clients[0].is_playing():
             self.bot.voice_clients[0].pause()
             self.pause_flag = True
-            await interaction.response.send_message('歌曲已暫停')
+            await interaction.response.send_message('歌曲已暫停🌟')
         else:
-            await interaction.response.send_message('沒有歌曲正在播放呦')
+            await interaction.response.send_message('沒有歌曲正在播放呦🌟')
 
-    @app_commands.command(name= "resume", description= "繼續撥放歌曲")  
+    @app_commands.command(name= "resume", description= "🌟繼續撥放歌曲🌟")  
     async def resume(self, interaction) -> None:
         if self.bot.voice_clients[0].is_paused():
             self.bot.voice_clients[0].resume()
             self.pause_flag = False
-            await interaction.response.send_message('歌曲已繼續播放')
+            await interaction.response.send_message('歌曲已繼續播放🌟')
         else:
-            await interaction.response.send_message('沒有歌曲正在暫停呦')
+            await interaction.response.send_message('沒有歌曲正在暫停呦🌟')
 
     def url_format(self, youtube_url: str) -> str:
         if youtube_url.startswith('https://www.youtube.com/'):
