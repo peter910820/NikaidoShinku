@@ -78,7 +78,7 @@ class YoutubePlayerV3r(commands.Cog):
                 else:
                     await interaction.response.send_message(f'歌曲已加入排序: 歌曲URL為{youtube_url} 呦🌟')
             else:
-                await interaction.response.send_message("找不到歌曲呦!❌")
+                await interaction.response.send_message('找不到歌曲呦!❌')
         else:
             await interaction.response.send_message('使用者還沒進入語音頻道呦❌')
 
@@ -98,10 +98,10 @@ class YoutubePlayerV3r(commands.Cog):
             self.bot.voice_clients[0].play(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(executable=self.ffmpeg_path, source=f"{self.song_path}/{title}.mp3"), volume= 0.1), after = lambda _ : self.after_song_interface(interaction))
         else:
             self.clean(self)
-            game = discord.Game("ブルーアーカイブ -Blue Archive-")
+            game = discord.Game('恋×シンアイ彼女')
             await self.bot.change_presence(activity=game, status=discord.Status.online) # status
-            await interaction.response.send_message("🌟已播放完歌曲🌟")
-            print("🌟已播放完歌曲🌟")
+            await interaction.response.send_message('🌟已播放完歌曲🌟')
+            print('🌟已播放完歌曲🌟')
 
     def after_song_interface(self, interaction: discord.Interaction):
         self.bot.loop.create_task(self.after_song(interaction))
@@ -195,7 +195,7 @@ class YoutubePlayerV3r(commands.Cog):
     def clean(self, interaction): #interaction???
         try:
             for file in os.scandir(self.song_path):
-                if file.path[-4:] == ".mp3":
+                if file.path[-4:] == '.mp3':
                     os.remove(file.path)
         except PermissionError:
             print('file is open now!')
