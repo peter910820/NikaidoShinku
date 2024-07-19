@@ -18,8 +18,8 @@ class SyaroBot(commands.Bot):
     async def setup_hook(self):
         await self.load_extension("cogs.error_handler")
         await self.load_extension("cogs.basic_commands.general")
-        await self.load_extension("cogs.youtube_player.youtube_player_V3")
-        # await self.load_extension("cogs.youtube_player.youtube_player_V3R")
+        # await self.load_extension("cogs.youtube_player.youtube_player_V3")
+        await self.load_extension("cogs.youtube_player.youtube_player_V3R")
         # await self.load_extension("cogs.song_quiz")
         await bot.tree.sync(guild= None)
 
