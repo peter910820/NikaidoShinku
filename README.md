@@ -2,6 +2,25 @@
 
 new discord music bot
 
+## ⚠️ Bug修復: pytube無法下載音樂
+
+![bug](bug.png)
+
+### resolved:
+[https://github.com/pytube/pytube/issues/1750](https://github.com/pytube/pytube/issues/1750)
+
+change pytube(package) -> cipher.py -> line272, line273:
+```python
+r'a\.[a-zA-Z]\s*&&\s*\([a-z]\s*=\s*a\.get\("n"\)\)\s*&&\s*'
+r'\([a-z]\s*=\s*([a-zA-Z0-9$]+)(\[\d+\])?\([a-z]\)',
+```
+to
+
+```python
+r'a\.[a-zA-Z]\s*&&\s*\([a-z]\s*=\s*a\.get\("n"\)\)\s*&&.*?\|\|\s*([a-z]+)',
+r'\([a-z]\s*=\s*([a-zA-Z0-9$]+)(\[\d+\])\([a-z]\)',
+```
+
 ## 03/21:修正部分網址不能撥放歌曲之錯誤
 
 ### command:

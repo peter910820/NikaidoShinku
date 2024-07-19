@@ -46,15 +46,14 @@ class YoutubePlayerV3r(commands.Cog):
                 await self.change_status_music()
                 url_parse = Playlist(youtube_url)
                 print(url_parse.video_urls)
-                self.play_queue = [[i, YouTube(i).title] for i in url_parse.video_urls]
+                self.play_queue = [{'url': i, 'music_object': YouTube(i)} for i in url_parse.video_urls]
                 # for p in url_parse.video_urls:
                 #     self.play_queue.append(p)
                 #     url_parse = YouTube(p)
                 #     self.title_queue.append(url_parse.title)
 
                 if not self.bot.voice_clients[0].is_playing():
-                    music = YouTube(self.play_queue[0])
-                    title = music.title
+                    title = self.play_queue[0]['music_object'].title
                     try:
                         music.streams.filter().get_lowest_resolution().download(filename=f"{self.song_path}/{title}.mp3")
                     except:
