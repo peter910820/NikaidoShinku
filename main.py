@@ -8,7 +8,7 @@ load_dotenv()
 intents = discord.Intents.default()
 intents.message_content = True
 
-class SyaroBot(commands.Bot):
+class ShinkuBot(commands.Bot):
     def __init__(self):
         super().__init__(
             command_prefix = '\\',
@@ -28,5 +28,5 @@ class SyaroBot(commands.Bot):
         game = discord.Game('喵!') # status
         await self.change_presence(status = discord.Status.online, activity = game) # change status to game
 
-bot = SyaroBot()
+bot = ShinkuBot()
 bot.run(os.getenv("TOKEN"))
