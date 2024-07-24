@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 from pytube import Playlist, YouTube
 
-class YoutubePlayer(commands.Cog):
+class YoutubePlayerV3(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.forbidden_char = ['/','\\',':','*','?','"','<','>',"|"]
@@ -268,4 +268,4 @@ class YoutubePlayer(commands.Cog):
         await interaction.response.send_message(error)
 
 async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(YoutubePlayer(bot), guild= None)
+    await bot.add_cog(YoutubePlayerV3(bot), guild= None)

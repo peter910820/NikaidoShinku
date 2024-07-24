@@ -1,6 +1,6 @@
-# nikaidoshinku-bot
+# NikaidoShinku
 
-new discord music bot
+A discord music bot used to play youtube songs
 
 ## 2024/07/19重大更新:
 

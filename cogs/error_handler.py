@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 
 class ErrorHandler(commands.Cog):
