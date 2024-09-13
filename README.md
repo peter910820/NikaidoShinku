@@ -1,5 +1,9 @@
 # NikaidoShinku
 
+## 2024/09/13
+
+專訓回來pytube那邊好像又出事了 windows可以用但我的linux vps程式整個沒辦法播音樂 目前解決不了 反正也要換語言開發了這個就先丟著吧(
+
 A discord music bot used to play youtube songs
 
 ## 2024/07/19重大更新:
